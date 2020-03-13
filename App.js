@@ -1,28 +1,45 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import Greeting from './components/Greeting'
+import React from "react";
+import { StyleSheet, Text, View, Image, Button } from "react-native";
+import Greeting from "./components/Greeting";
+import Record from './components/Record'
 
-let pic = {uri: 'https://noma.org/wp-content/uploads/2018/12/mindfulness.jpg'}
+let pic = {
+  uri: "https://noma.org/wp-content/uploads/2018/12/mindfulness.jpg"
+};
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Mindfulness app</Text>
-      <Greeting name="yogi" />
-      <Image source={pic} style={{width: 400, height: 500}}/>
-    </View>
-  );
+class App extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      renderRecord: false
+    }
+  }
+
+  render() {
+    return (
+      !this.state.renderRecord ?
+      <View style={styles.container}>
+        <Text style={styles.title}>Mindfulness app</Text>
+        <Greeting name="yogi" />
+        <Image source={pic} style={{ width: 400, height: 500 }} />
+        <Button title="View audio" onPress={() => this.setState({renderRecord: true})}/>
+      </View>
+      : <Record />
+    );
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center"
   },
   title: {
-    fontWeight: 'bold',
-    fontSize: 30,
+    fontWeight: "bold",
+    fontSize: 30
   }
 });
+
+export default App;
