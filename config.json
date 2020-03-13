@@ -1,3 +1,4 @@
 {
-  "CLOUD_FUNCTION_URL": ""
+  "CLOUD_FUNCTION_URL": "https://us-central1-chrome-entropy-271023.cloudfunctions.net/getTranscription-1",
+  "SPEECH_TEXT_API_KEY": "AIzaSyDRYIQQ9mYmS5oYe4FcfUoSMkQ6RyTBcCE"
 }

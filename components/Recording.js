@@ -2,15 +2,19 @@ import { Audio } from "expo-av";
 import * as Permissions from "expo-permissions";
 import * as FileSystem from "expo-file-system";
 import { FontAwesome } from "@expo/vector-icons";
+import config from "../config.json";
 import Icon from "react-native-vector-icons/Ionicons";
 import React from "react";
+import Modal from "react-native-modal";
+import Speech from "./Speech";
 import {
   StyleSheet,
   Text,
   View,
   Image,
   Button,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 
 const recordingOptions = {
@@ -34,22 +38,24 @@ const recordingOptions = {
     linearPCMIsFloat: false
   }
 };
-class Record extends React.Component {
+class Recording extends React.Component {
   constructor() {
     super();
     this.state = {
       isRecording: false,
       isFetching: false,
-      affirmations: ""
+      affirmations: "",
+      modal: false
     };
   }
 
   startRecording = async () => {
     console.log("start recording");
-    const { status } = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
+    const { status } = await Permissions.getAsync(Permissions.AUDIO_RECORDING);
     if (status !== "granted") return;
 
     this.setState({ isRecording: true });
+    this.setState({ affirmations: "" });
     // some of these are not applicable, but are required
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: true,
@@ -79,16 +85,17 @@ class Record extends React.Component {
     try {
       await this.recording.stopAndUnloadAsync();
     } catch (error) {}
+    console.log(this.recording.getURI());
   };
 
   playSound = async () => {
-    const file = this.recording.getURI();
-    const info = await FileSystem.getInfoAsync(file);
-    console.log("file", file, "info", info);
+    const audioFile = this.recording.getURI();
+    const info = await FileSystem.getInfoAsync(audioFile);
+    console.log("file", audioFile, "info", info);
 
     const soundObject = new Audio.Sound();
     try {
-      await soundObject.loadAsync({ uri: file });
+      await soundObject.loadAsync({ uri: audioFile });
       await soundObject.playAsync();
       // Your sound is playing!
     } catch (error) {
@@ -99,59 +106,51 @@ class Record extends React.Component {
   getTranscription = async () => {
     this.setState({ isFetching: true });
     try {
+      console.log("get transcription try");
       const info = await FileSystem.getInfoAsync(this.recording.getURI());
       console.log(`FILE INFO: ${JSON.stringify(info)}`);
-      const uri = info.uri;
       const formData = new FormData();
-      formData.append("file", {
-        uri,
+      formData.append("audioFile", {
+        uri: info.uri,
         type: "audio/x-wav",
         // could be anything
         name: "speech2text"
       });
+      console.log("formData: ", formData);
+      console.log("config cloud: ", config.CLOUD_FUNCTION_URL);
       const response = await fetch(config.CLOUD_FUNCTION_URL, {
         method: "POST",
         body: formData
       });
       const data = await response.json();
-      this.setState({ affirmations: data.transcript });
+      console.log("data", data);
+      this.setState({ affirmations: data.transcript, modal: true });
     } catch (error) {
       console.log("There was an error", error);
-      console.log("transcription error")
+      console.log("transcription error");
       this.stopRecording();
-      this.resetRecording();
+      this.deleteRecordingFile();
+      this.recording = null;
     }
     this.setState({ isFetching: false });
   };
 
   deleteRecordingFile = async () => {
-    console.log("Deleting file");
     try {
-      const info = await FileSystem.getInfoAsync(this.recording.getURI());
-      await FileSystem.deleteAsync(info.uri);
+      console.log(this.recording);
+      const { uri } = await FileSystem.getInfoAsync(this.recording.getURI());
+      await FileSystem.deleteAsync(uri);
+      console.log("Deletied file");
     } catch (error) {
       console.log("There was an error deleting recording file", error);
-      ƒ;
     }
   };
 
-  resetRecording = () => {
-    this.recording = null;
-    this.deleteRecordingFile();
-  };
-
-  handlePressStart = () => {
-    this.startRecording();
-  };
-
-  handlePressStop = () => {
-    this.stopRecording();
-    this.getTranscription();
-  };
-
   render() {
-    const { isRecording, isFetching, affirmations } = this.state;
+    const { isRecording, isFetching, affirmations, modal, speech} = this.state;
+
     return (
+      !speech ?
       <View style={styles.container}>
         <Text style={styles.title}>
           Let's start recording your affirmations
@@ -162,23 +161,45 @@ class Record extends React.Component {
         )}
         <TouchableOpacity
           style={styles.startButton}
-          onPress={this.handlePressStart}
+          onPress={this.startRecording}
         >
-          <Text>Press to Start </Text>
+          <Text>Press to start </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.stopButton}
-          onPress={this.handlePressStop}
+          onPress={this.stopRecording}
         >
-          <Text>Press to Stop</Text>
+          <Text>Press to stop</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={this.playSound}>
+
+        <TouchableOpacity style={styles.playButton} onPress={this.playSound}>
           <Text>Play your sound</Text>
         </TouchableOpacity>
 
-        {this.affirmations && <Text>{this.affirmations}</Text>}
+        {isFetching && <ActivityIndicator size={32} color="#48C9B0" />}
+        <TouchableOpacity
+          style={styles.transcribeButton}
+          onPress={this.getTranscription}
+        >
+          <Text>Transcribe your sound</Text>
+        </TouchableOpacity>
+        {modal && (
+          <Modal isVisible={modal} animationType="slide" style={styles.modal}>
+            <Text>{affirmations}</Text>
+            <Button
+            title="Looks good!"
+            onPress={() => this.setState({ speech: true })}
+          />
+          <Button
+            title="Try again"
+            onPress={() => this.setState({ modal: false })}
+          />
+          </Modal>
+        )}
       </View>
+      :
+      <Speech />
     );
   }
 }
@@ -186,12 +207,12 @@ class Record extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#3A2E39",
     alignItems: "center",
     justifyContent: "center"
   },
   title: {
-    color: "purple",
+    color: "#E5989B",
     fontWeight: "bold",
     fontSize: 20
   },
@@ -211,14 +232,28 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 20
   },
-  button: {
+  playButton: {
     backgroundColor: "pink",
     paddingVertical: 20,
     width: "90%",
     alignItems: "center",
     borderRadius: 5,
     marginTop: 20
+  },
+  transcribeButton: {
+    backgroundColor: "#A6A6A6",
+    paddingVertical: 20,
+    width: "90%",
+    alignItems: "center",
+    borderRadius: 5,
+    marginTop: 20
+  },
+  modal: {
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: "#ede3f2",
+    padding: 100
   }
 });
 
-export default Record;
+export default Recording;

@@ -1,43 +1,37 @@
-class Transcript extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      isRecording: false,
-      isFetching: false,
-      affirmations: ""
-    };
-  }
+async function main() {
+  // Imports the Google Cloud client library
+  const speech = require('@google-cloud/speech');
+  const fs = require('fs');
 
-  getTranscription = async () => {
-    this.setState({ isFetching: true });
-    try {
-      const info = await FileSystem.getInfoAsync(this.recording.getURI());
-      console.log(`FILE INFO: ${JSON.stringify(info)}`);
-      const uri = info.uri;
-      const formData = new FormData();
-      formData.append("file", {
-        uri,
-        type: "audio/x-wav",
-        // could be anything
-        name: "speech2text"
-      });
-      const response = await fetch(config.CLOUD_FUNCTION_URL, {
-        method: "POST",
-        body: formData
-      });
-      const data = await response.json();
-      this.setState({ affirmations: data.transcript });
-    } catch (error) {
-      console.log("There was an error", error);
-      console.log("transcription error")
-      this.stopRecording();
-      this.resetRecording();
-    }
-    this.setState({ isFetching: false });
+  // Creates a client
+  const client = new speech.SpeechClient();
+
+  // The name of the audio file to transcribe
+  const fileName = './resources/audio.raw';
+
+  // Reads a local audio file and converts it to base64
+  const file = fs.readFileSync(fileName);
+  const audioBytes = file.toString('base64');
+
+  // The audio file's encoding, sample rate in hertz, and BCP-47 language code
+  const audio = {
+    content: audioBytes,
+  };
+  const config = {
+    encoding: 'LINEAR16',
+    sampleRateHertz: 16000,
+    languageCode: 'en-US',
+  };
+  const request = {
+    audio: audio,
+    config: config,
   };
 
-
+  // Detects speech in the audio file
+  const [response] = await client.recognize(request);
+  const transcription = response.results
+    .map(result => result.alternatives[0].transcript)
+    .join('\n');
+  console.log(`Transcription: ${transcription}`);
 }
-
-export default Transcript
-
+main().catch(console.error);
