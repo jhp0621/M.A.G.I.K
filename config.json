@@ -1,4 +1,6 @@
 {
-  "CLOUD_FUNCTION_URL": "https://us-central1-chrome-entropy-271023.cloudfunctions.net/getTranscription-1",
-  "SPEECH_TEXT_API_KEY": "AIzaSyDRYIQQ9mYmS5oYe4FcfUoSMkQ6RyTBcCE"
+  "CLOUD_FUNCTION_URL1": "https://us-central1-chrome-entropy-271023.cloudfunctions.net/getTranscription-1",
+  "CLOUD_FUNCTION_URL2": "https://us-central1-chrome-entropy-271023.cloudfunctions.net/getSpeech",
+  "API_KEY_IOS": "AIzaSyDRYIQQ9mYmS5oYe4FcfUoSMkQ6RyTBcCE",
+  "API_KEY_ANDROID": "AIzaSyDXeC2TkQLA8Kn_NGDv4mtfDofORD5zK00"
 }

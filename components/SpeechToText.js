@@ -6,7 +6,7 @@ import config from "../config.json";
 import Icon from "react-native-vector-icons/Ionicons";
 import React from "react";
 import Modal from "react-native-modal";
-import Speech from "./Speech";
+import TextToSpeech from "./TextToSpeech";
 import {
   StyleSheet,
   Text,
@@ -38,7 +38,8 @@ const recordingOptions = {
     linearPCMIsFloat: false
   }
 };
-class Recording extends React.Component {
+
+class SpeechToText extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -51,7 +52,7 @@ class Recording extends React.Component {
 
   startRecording = async () => {
     console.log("start recording");
-    const { status } = await Permissions.getAsync(Permissions.AUDIO_RECORDING);
+    const { status } = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
     if (status !== "granted") return;
 
     this.setState({ isRecording: true });
@@ -85,7 +86,6 @@ class Recording extends React.Component {
     try {
       await this.recording.stopAndUnloadAsync();
     } catch (error) {}
-    console.log(this.recording.getURI());
   };
 
   playSound = async () => {
@@ -117,8 +117,8 @@ class Recording extends React.Component {
         name: "speech2text"
       });
       console.log("formData: ", formData);
-      console.log("config cloud: ", config.CLOUD_FUNCTION_URL);
-      const response = await fetch(config.CLOUD_FUNCTION_URL, {
+
+      const response = await fetch(config.CLOUD_FUNCTION_URL1, {
         method: "POST",
         body: formData
       });
@@ -199,7 +199,7 @@ class Recording extends React.Component {
         )}
       </View>
       :
-      <Speech />
+      <TextToSpeech text={affirmations} />
     );
   }
 }
@@ -256,4 +256,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Recording;
+export default SpeechToText;
