@@ -6,14 +6,18 @@ import {
   Image,
   Button,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  AsyncStorage
 } from "react-native";
 import config from "../config.json";
 import { Platform } from "react-native";
 import * as FileSystem from "expo-file-system";
 import { Audio } from "expo-av";
-import base64 from 'react-native-base64'
-import { Buffer } from 'buffer'
+import base64 from "react-native-base64";
+import Base64 from "Base64";
+import { Buffer } from "buffer";
+import * as Speech from "expo-speech";
+import { Asset } from "expo-asset";
 
 class TextToSpeech extends React.Component {
   constructor() {
@@ -40,24 +44,24 @@ class TextToSpeech extends React.Component {
     const key =
       Platform.OS === "ios" ? config.API_KEY_IOS : config.API_KEY_ANDROID;
     const address = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${key}`;
-    const path = `${FileSystem.cacheDirectory}/voice.mp3`;
+    const audioUri = `${FileSystem.cacheDirectory}/voice.mp3`;
 
     try {
       const response = await fetch(`${address}`, {
         headers: {
           "Content-Type": "application/json",
-          "Accept": "application/json"
+          Accept: "application/json"
         },
         body: JSON.stringify(request),
         method: "POST"
       });
-      const result = await response.json();
-      console.log("result: ", result);
+      const { audioContent } = await response.json();
 
-      const decoded = base64.decode(result.audioContent.slice(2))
-      console.log("decoded: ", decoded)
-      const download = FileSystem.downloadAsync(decoded, path)
-      this.audio = download.uri
+      await FileSystem.writeAsStringAsync(audioUri, audioContent, {
+        encoding: FileSystem.EncodingType.Base64
+      });
+      this.audioUri = audioUri;
+
     } catch (err) {
       console.warn(err);
     }
@@ -67,11 +71,15 @@ class TextToSpeech extends React.Component {
     this.getSpeech();
   }
 
-  playSound = async  () => {
-
+  playSound = async () => {
+    // Speech.speak(this.props.text, {
+    //   language: "en",
+    //   pitch: 2,
+    //   rate: 0
+    // });
     const soundObject = new Audio.Sound();
     try {
-      await soundObject.loadAsync({ uri: this.audio });
+      await soundObject.loadAsync({uri: this.audioUri});
       await soundObject.playAsync();
       // Your sound is playing!
     } catch (error) {
@@ -86,7 +94,6 @@ class TextToSpeech extends React.Component {
         <TouchableOpacity style={styles.playButton} onPress={this.playSound}>
           <Text>Play affirmations</Text>
         </TouchableOpacity>
-
       </View>
     );
   }
