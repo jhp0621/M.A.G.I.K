@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, Button } from "react-native";
 import Greeting from "./components/Greeting";
-import Recording from './components/Recording'
+import SpeechToText from './components/SpeechToText'
 
 let pic = {
   uri: "https://noma.org/wp-content/uploads/2018/12/mindfulness.jpg"
@@ -24,7 +24,7 @@ class App extends React.Component {
         <Image source={pic} style={{ width: 400, height: 500 }} />
         <Button title="View audio" onPress={() => this.setState({renderRecord: true})}/>
       </View>
-      : <Recording />
+      : <SpeechToText />
     );
   }
 }

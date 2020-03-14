@@ -10,7 +10,9 @@
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "@google-cloud/speech": "^3.6.0",
+    "@google-cloud/text-to-speech": "^2.3.0",
     "busboy": "^0.3.1",
+    "crypto-js": "^4.0.0",
     "expo": "~36.0.0",
     "expo-av": "~8.0.0",
     "expo-file-system": "~8.0.0",
@@ -24,7 +26,8 @@
     "react-native-vector-icons": "^6.6.0",
     "react-native-web": "~0.11.7",
     "react-redux": "^7.2.0",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "url-parse": "^1.4.7"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.0.0",
