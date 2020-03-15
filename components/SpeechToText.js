@@ -46,7 +46,8 @@ export default class SpeechToText extends Component {
       isRecording: false,
       isFetching: false,
       affirmations: "",
-      modal: false
+      modal: false,
+      speech: false
     };
   }
 
