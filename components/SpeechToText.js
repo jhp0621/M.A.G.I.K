@@ -273,8 +273,8 @@ const styles = StyleSheet.create({
   modal: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#C5CEC8"
-    // padding: 100
+    backgroundColor: "#FFF0EA",
+
   },
   transcription: {
     fontWeight: "bold",
