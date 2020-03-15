@@ -30,38 +30,38 @@ export default class VoiceForm extends Component {
     return (
       !getSpeech ?
       <View style={styles.container}>
-        <Text style={styles.title}>Choose your voice for meditation</Text>
+        <Text style={styles.title}>Choose voice for meditation</Text>
         <Text style={styles.mini}>(Scroll to view more options)</Text>
-        <Text style={styles.paragraph}>Voice</Text>
+        <Text style={styles.field}>Voice</Text>
         <Picker itemStyle={styles.pickItem}
           selectedValue={name}
           onValueChange={(itemValue, itemIndex) =>
             this.setState({name: itemValue})
           }>
-          <Picker.Item label="female 1" value="en-US-Wavenet-C" />
-          <Picker.Item label="female 2" value="en-US-Wavenet-F" />
-          <Picker.Item label="male 1" value="en-US-Wavenet-B" />
-          <Picker.Item label="male 2" value="en-US-Wavenet-D" />
+          <Picker.Item label="𝚏𝚎𝚖𝚊𝚕𝚎𝟷" value="en-US-Wavenet-C" />
+          <Picker.Item label="𝚏𝚎𝚖𝚊𝚕𝚎𝟸" value="en-US-Wavenet-F" />
+          <Picker.Item label="𝚖𝚊𝚕𝚎𝟷" value="en-US-Wavenet-B" />
+          <Picker.Item label="𝚖𝚊𝚕𝚎𝟸" value="en-US-Wavenet-D" />
         </Picker>
-        <Text style={styles.paragraph}>Pitch</Text>
+        <Text style={styles.field}>Pitch</Text>
         <Picker itemStyle={styles.pickItem}
           selectedValue={pitch}
           onValueChange={(itemValue, itemIndex) =>
             this.setState({pitch: itemValue})
           }>
-          <Picker.Item label="low" value="-4" />
-          <Picker.Item label="medium" value="-2" />
-          <Picker.Item label="high" value="0" />
+          <Picker.Item label="𝚕𝚘𝚠" value="-4" />
+          <Picker.Item label="𝚖𝚎𝚍𝚒𝚞𝚖" value="-2" />
+          <Picker.Item label="𝚑𝚒𝚐𝚑" value="0" />
         </Picker>
-        <Text style={styles.paragraph}>Speed</Text>
+        <Text style={styles.field}>Speed</Text>
         <Picker itemStyle={styles.pickItem}
           selectedValue={speed}
           onValueChange={(itemValue, itemIndex) =>
             this.setState({speed: itemValue})
           }>
-          <Picker.Item label="slow" value="0.8" />
-          <Picker.Item label="normal" value="0.9" />
-          <Picker.Item label="fast" value="1.0" />
+          <Picker.Item label="𝚜𝚕𝚘𝚠" value="0.8" />
+          <Picker.Item label="𝚗𝚘𝚛𝚖𝚊𝚕" value="0.9" />
+          <Picker.Item label="𝚏𝚊𝚜𝚝" value="1.0" />
         </Picker>
 
         <TouchableOpacity style={styles.submitButton} onPress={()=> this.setState({getSpeech: true})}>
@@ -78,28 +78,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "brown",
+    backgroundColor: "#943942",
   },
   title: {
     alignSelf: "center",
     marginBottom: 100,
     color: "#E5989B",
-    fontWeight: "bold",
+    fontWeight: "500",
     fontSize: 20,
     textAlign: 'center',
   },
   mini: {
     alignSelf: "center",
+    paddingBottom: 15,
   },
-  paragraph: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    color: '#34495e',
+  field: {
+    fontSize: 17,
+    fontWeight: '300',
+    color: '#73A2D0',
     marginLeft: 8,
+    marginTop: 35,
   },
   pickItem: {
     height: 70,
     fontSize: 20,
+    color: "#1D1D1D",
   },
   submitButton: {
     backgroundColor: "pink",
@@ -107,7 +110,7 @@ const styles = StyleSheet.create({
     width: "50%",
     alignItems: "center",
     borderRadius: 5,
-    marginTop: 20,
+    marginTop: 70,
     marginLeft: "25%",
     marginBottom: 10
   }

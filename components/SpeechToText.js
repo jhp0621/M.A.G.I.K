@@ -4,9 +4,9 @@ import * as FileSystem from "expo-file-system";
 import { FontAwesome } from "@expo/vector-icons";
 import config from "../config.json";
 import Icon from "react-native-vector-icons/Ionicons";
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import Modal from "react-native-modal";
-import VoiceForm from './VoiceForm'
+import VoiceForm from "./VoiceForm";
 import {
   StyleSheet,
   Text,
@@ -147,13 +147,17 @@ export default class SpeechToText extends Component {
   };
 
   render() {
-    const { isRecording, isFetching, affirmations, modal, speech} = this.state;
+    const { isRecording, isFetching, affirmations, modal, speech } = this.state;
 
-    return (
-      !speech ?
+    return !speech ? (
       <View style={styles.container}>
-        <Text style={styles.title}>
-          Let's get started!
+        <Text style={styles.title}>Let's get started!</Text>
+        <Text style={styles.paragraph}>
+          Please record affirmations you would like to meditate to. For example:{" "}
+        </Text>
+        <Text style={styles.example}>
+          𝚃𝚘𝚍𝚊𝚢 𝚒𝚜 𝚐𝚘𝚒𝚗𝚐 𝚝𝚘 𝚋𝚎 𝚊𝚗 𝚊𝚠𝚎𝚜𝚘𝚖𝚎 𝚍𝚊𝚢. 𝙸'𝚖 𝚐𝚘𝚒𝚗𝚐 𝚝𝚘 𝚜𝚝𝚊𝚢 𝚌𝚘𝚖𝚖𝚒𝚝𝚝𝚎𝚍 𝚝𝚘 𝚖𝚢
+          𝚐𝚘𝚊𝚕𝚜 𝚊𝚗𝚍 𝚛𝚎𝚖𝚊𝚒𝚗 𝚙𝚘𝚜𝚒𝚝𝚒𝚟𝚎. 𝙸 𝚊𝚖 𝚝𝚛𝚞𝚕𝚢 #𝚋𝚕𝚎𝚜𝚜𝚎𝚍 ʚ(´◡`)ɞ
         </Text>
 
         {isRecording && (
@@ -186,19 +190,19 @@ export default class SpeechToText extends Component {
         </TouchableOpacity>
         {modal && (
           <Modal isVisible={modal} animationType="slide" style={styles.modal}>
-            <Text>{affirmations}</Text>
+            <Text style={styles.transcription}>{affirmations}</Text>
             <Button
-            title="Looks good!"
-            onPress={() => this.setState({ speech: true })}
-          />
-          <Button
-            title="Try again"
-            onPress={() => this.setState({ modal: false })}
-          />
+              title="Looks good!"
+              onPress={() => this.setState({ speech: true })}
+            />
+            <Button
+              title="Try again"
+              onPress={() => this.setState({ modal: false })}
+            />
           </Modal>
         )}
       </View>
-      :
+    ) : (
       <VoiceForm text={affirmations} />
     );
   }
@@ -212,10 +216,27 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   title: {
-    color: "#E5989B",
+    color: "#FFE5D9",
     fontWeight: "bold",
     fontSize: 20,
-    padding: 50
+    paddingBottom: 40
+  },
+  paragraph: {
+    fontSize: 18,
+    marginTop: 15,
+    marginBottom: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    color: "#FFCAD4"
+  },
+  example: {
+    fontWeight: "bold",
+    opacity: 0.8,
+    fontSize: 20,
+    marginTop: 15,
+    marginBottom: 10,
+    color: "#FFD3DB",
+    borderWidth: 1
   },
   startButton: {
     backgroundColor: "#48C9B0",
@@ -226,7 +247,7 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   stopButton: {
-    backgroundColor: "red",
+    backgroundColor: "#FF1654",
     paddingVertical: 20,
     width: "90%",
     alignItems: "center",
@@ -242,7 +263,7 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   transcribeButton: {
-    backgroundColor: "#A6A6A6",
+    backgroundColor: "#FFE273",
     paddingVertical: 20,
     width: "90%",
     alignItems: "center",
@@ -252,7 +273,15 @@ const styles = StyleSheet.create({
   modal: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#ede3f2",
-    padding: 100
+    backgroundColor: "#C5CEC8"
+    // padding: 100
+  },
+  transcription: {
+    fontWeight: "bold",
+    fontSize: 18,
+    margin: 30,
+    padding: 30,
+    color: "#3A2F32",
+    borderWidth: 1
   }
 });

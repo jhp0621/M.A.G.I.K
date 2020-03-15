@@ -7,12 +7,14 @@ import {
   Button,
   TouchableOpacity,
   ActivityIndicator,
-  AsyncStorage
+  AsyncStorage, ImageBackground
 } from "react-native";
 import config from "../config.json";
 import { Platform } from "react-native";
 import * as FileSystem from "expo-file-system";
 import { Audio, Video } from "expo-av";
+
+let pic = {uri: "https://ctl.s6img.com/society6/img/Q_KUOWzLa5ga0epJdrd0SrI6xfc/w_700/canvas/~artwork/s6-original-art-uploads/society6/uploads/misc/7e562636347f4bcda77ff4a5bf1a6f5c/~~/balancing-stones-21-canvas.jpg?wait=0&attempt=0"}
 
 class TextToSpeech extends React.Component {
   constructor(props) {
@@ -84,13 +86,16 @@ class TextToSpeech extends React.Component {
     const { isFetching } = this.state;
 
     return (
-      <View style={styles.container}>
+      <ImageBackground source={pic} style={{width: '100%', height: '110%', top:-60}}>
+ <View style={styles.container}>
         <Text>Time to meditate</Text>
         {isFetching && <ActivityIndicator size={32} color="#48C9B0" />}
         <TouchableOpacity style={styles.playButton} onPress={this.playSound}>
           <Text>Play affirmations</Text>
         </TouchableOpacity>
       </View>
+  </ImageBackground>
+
     );
   }
 }
@@ -99,7 +104,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   title: {
     color: "#E5989B",
