@@ -4,9 +4,9 @@ import * as FileSystem from "expo-file-system";
 import { FontAwesome } from "@expo/vector-icons";
 import config from "../config.json";
 import Icon from "react-native-vector-icons/Ionicons";
-import React from "react";
+import React, { Component } from 'react';
 import Modal from "react-native-modal";
-import TextToSpeech from "./TextToSpeech";
+import VoiceForm from './VoiceForm'
 import {
   StyleSheet,
   Text,
@@ -39,7 +39,7 @@ const recordingOptions = {
   }
 };
 
-class SpeechToText extends React.Component {
+export default class SpeechToText extends Component {
   constructor() {
     super();
     this.state = {
@@ -153,7 +153,7 @@ class SpeechToText extends React.Component {
       !speech ?
       <View style={styles.container}>
         <Text style={styles.title}>
-          Let's start recording your affirmations
+          Let's get started!
         </Text>
 
         {isRecording && (
@@ -199,7 +199,7 @@ class SpeechToText extends React.Component {
         )}
       </View>
       :
-      <TextToSpeech text={affirmations} />
+      <VoiceForm text={affirmations} />
     );
   }
 }
@@ -214,7 +214,8 @@ const styles = StyleSheet.create({
   title: {
     color: "#E5989B",
     fontWeight: "bold",
-    fontSize: 20
+    fontSize: 20,
+    padding: 50
   },
   startButton: {
     backgroundColor: "#48C9B0",
@@ -255,5 +256,3 @@ const styles = StyleSheet.create({
     padding: 100
   }
 });
-
-export default SpeechToText;

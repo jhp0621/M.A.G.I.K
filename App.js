@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, Image, Button } from "react-native";
 import Greeting from "./components/Greeting";
 import SpeechToText from './components/SpeechToText'
+import ErrorBoundary from './components/ErrorBoundary'
 
 let pic = {
   uri: "https://noma.org/wp-content/uploads/2018/12/mindfulness.jpg"
@@ -17,6 +18,7 @@ class App extends React.Component {
 
   render() {
     return (
+
       !this.state.renderRecord ?
       <View style={styles.container}>
         <Text style={styles.title}>Mindfulness app</Text>
@@ -25,6 +27,7 @@ class App extends React.Component {
         <Button title="Click here" onPress={() => this.setState({renderRecord: true})}/>
       </View>
       : <SpeechToText />
+
     );
   }
 }

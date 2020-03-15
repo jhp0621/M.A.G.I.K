@@ -12,33 +12,30 @@ import {
 import config from "../config.json";
 import { Platform } from "react-native";
 import * as FileSystem from "expo-file-system";
-import { Audio } from "expo-av";
-import base64 from "react-native-base64";
-import Base64 from "Base64";
-import { Buffer } from "buffer";
-import * as Speech from "expo-speech";
-import { Asset } from "expo-asset";
+import { Audio, Video } from "expo-av";
 
 class TextToSpeech extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      voice: {
-        languageCode: "en-US",
-        name: "en-US-Standard-B",
-        ssmlGender: "FEMALE"
-      },
-      audioFile: ""
+      isFetching: false
     };
   }
 
   getSpeech = async () => {
-    const { text } = this.props;
+    const {text, name, pitch, speed} = this.props
 
     let request = {
-      input: { text: text },
-      voice: this.state.voice,
-      audioConfig: { audioEncoding: "MP3" }
+      input: { text },
+      voice: {
+        languageCode: "en-US",
+        name
+      },
+      audioConfig: {
+        audioEncoding: "MP3",
+        pitch,
+        speakingRate: speed
+      }
     };
 
     const key =
@@ -47,6 +44,7 @@ class TextToSpeech extends React.Component {
     const audioUri = `${FileSystem.cacheDirectory}/voice.mp3`;
 
     try {
+      this.setState({ isFetching: true });
       const response = await fetch(`${address}`, {
         headers: {
           "Content-Type": "application/json",
@@ -61,10 +59,10 @@ class TextToSpeech extends React.Component {
         encoding: FileSystem.EncodingType.Base64
       });
       this.audioUri = audioUri;
-
     } catch (err) {
       console.warn(err);
     }
+    this.setState({ isFetching: false });
   };
 
   componentDidMount() {
@@ -72,14 +70,9 @@ class TextToSpeech extends React.Component {
   }
 
   playSound = async () => {
-    // Speech.speak(this.props.text, {
-    //   language: "en",
-    //   pitch: 2,
-    //   rate: 0
-    // });
     const soundObject = new Audio.Sound();
     try {
-      await soundObject.loadAsync({uri: this.audioUri});
+      await soundObject.loadAsync({ uri: this.audioUri });
       await soundObject.playAsync();
       // Your sound is playing!
     } catch (error) {
@@ -88,9 +81,12 @@ class TextToSpeech extends React.Component {
   };
 
   render() {
+    const { isFetching } = this.state;
+
     return (
       <View style={styles.container}>
-        <Text>Speech</Text>
+        <Text>Time to meditate</Text>
+        {isFetching && <ActivityIndicator size={32} color="#48C9B0" />}
         <TouchableOpacity style={styles.playButton} onPress={this.playSound}>
           <Text>Play affirmations</Text>
         </TouchableOpacity>
