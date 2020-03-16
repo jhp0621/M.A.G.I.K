@@ -3,11 +3,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
-  Button,
   TouchableOpacity,
   ActivityIndicator,
-  AsyncStorage,
   ImageBackground,
   SafeAreaView,
   ScrollView
@@ -17,7 +14,6 @@ import { Platform } from "react-native";
 import * as FileSystem from "expo-file-system";
 import { Audio, Video } from "expo-av";
 import SpeechToText from "./SpeechToText";
-import { Asset } from "expo-asset";
 import { FontAwesome } from "@expo/vector-icons";
 
 class TextToSpeech extends React.Component {

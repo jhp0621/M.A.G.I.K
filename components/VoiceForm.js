@@ -1,14 +1,11 @@
 import React, { Component } from "react";
 import {
-  Alert,
-  Button,
   View,
   StyleSheet,
   Picker,
   Text,
   TouchableOpacity
 } from "react-native";
-import { Formik } from "formik";
 import TextToSpeech from "./TextToSpeech";
 
 export default class VoiceForm extends Component {

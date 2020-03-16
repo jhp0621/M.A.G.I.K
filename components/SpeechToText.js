@@ -3,7 +3,6 @@ import * as Permissions from "expo-permissions";
 import * as FileSystem from "expo-file-system";
 import { FontAwesome } from "@expo/vector-icons";
 import config from "../config.json";
-import Icon from "react-native-vector-icons/Ionicons";
 import React, { Component } from "react";
 import Modal from "react-native-modal";
 import VoiceForm from "./VoiceForm";
@@ -11,14 +10,12 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   Button,
   TouchableOpacity,
   ActivityIndicator
 } from "react-native";
 
 const recordingOptions = {
-  // android not currently in use, but parameters are required
   android: {
     extension: ".m4a",
     outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
@@ -52,7 +49,6 @@ export default class SpeechToText extends Component {
   }
 
   startRecording = async () => {
-    console.log("start recording");
     const { status } = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
     if (status !== "granted") return;
 
@@ -69,12 +65,10 @@ export default class SpeechToText extends Component {
     });
     const recording = new Audio.Recording();
     try {
-      console.log("recording try");
       await recording.prepareToRecordAsync(recordingOptions);
       await recording.startAsync();
       // You are now recording!
     } catch (error) {
-      console.log("recording catch");
       console.log(error);
       this.stopRecording();
     }
@@ -82,7 +76,6 @@ export default class SpeechToText extends Component {
   };
 
   stopRecording = async () => {
-    console.log("stop recording");
     this.setState({ isRecording: false });
     try {
       await this.recording.stopAndUnloadAsync();
@@ -107,7 +100,6 @@ export default class SpeechToText extends Component {
   getTranscription = async () => {
     this.setState({ isFetching: true });
     try {
-      console.log("get transcription try");
       const info = await FileSystem.getInfoAsync(this.recording.getURI());
       console.log(`FILE INFO: ${JSON.stringify(info)}`);
       const formData = new FormData();
@@ -117,18 +109,15 @@ export default class SpeechToText extends Component {
         // could be anything
         name: "speech2text"
       });
-      console.log("formData: ", formData);
 
       const response = await fetch(config.CLOUD_FUNCTION_URL1, {
         method: "POST",
         body: formData
       });
       const data = await response.json();
-      console.log("data", data);
       this.setState({ affirmations: data.transcript, modal: true });
     } catch (error) {
       console.log("There was an error", error);
-      console.log("transcription error");
       this.stopRecording();
       this.deleteRecordingFile();
       this.recording = null;
@@ -138,10 +127,9 @@ export default class SpeechToText extends Component {
 
   deleteRecordingFile = async () => {
     try {
-      console.log(this.recording);
       const { uri } = await FileSystem.getInfoAsync(this.recording.getURI());
       await FileSystem.deleteAsync(uri);
-      console.log("Deletied file");
+      console.log("Deleted file");
     } catch (error) {
       console.log("There was an error deleting recording file", error);
     }
