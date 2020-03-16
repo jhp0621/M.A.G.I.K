@@ -96,7 +96,7 @@ export default class SpeechToText extends Component {
 
     const soundObject = new Audio.Sound();
     try {
-      await soundObject.loadAsync({ uri: audioFile });
+      await soundObject.loadAsync({ uri: audioFile }); await soundObject.setVolumeAsync(1)
       await soundObject.playAsync();
       // Your sound is playing!
     } catch (error) {
@@ -204,7 +204,7 @@ export default class SpeechToText extends Component {
         )}
       </View>
     ) : (
-      <VoiceForm text={affirmations} />
+      <VoiceForm text={affirmations} playSound={this.playSound}/>
     );
   }
 }
@@ -274,8 +274,7 @@ const styles = StyleSheet.create({
   modal: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#FFF0EA",
-
+    backgroundColor: "#FFD9DE",
   },
   transcription: {
     fontWeight: "bold",

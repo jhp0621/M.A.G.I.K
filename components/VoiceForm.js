@@ -25,7 +25,7 @@ export default class VoiceForm extends Component {
 
   render() {
     const { name, pitch, speed, getSpeech} = this.state;
-    const {text} = this.props
+    const {text, playSound} = this.props
 
     return (
       !getSpeech ?
@@ -65,11 +65,11 @@ export default class VoiceForm extends Component {
         </Picker>
 
         <TouchableOpacity style={styles.submitButton} onPress={()=> this.setState({getSpeech: true})}>
-          <Text>Get Speech</Text>
+          <Text>Submit</Text>
         </TouchableOpacity>
     </View>
     :
-    <TextToSpeech text={text} name={name} pitch={pitch} speed={speed} />
+    <TextToSpeech text={text} name={name} pitch={pitch} speed={speed} playSound={playSound}/>
     )
   }
 }
@@ -78,12 +78,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#943942",
+    backgroundColor: "#91829B",
   },
   title: {
     alignSelf: "center",
     marginBottom: 100,
-    color: "#E5989B",
+    color: "#FFC2AA",
     fontWeight: "500",
     fontSize: 20,
     textAlign: 'center',
@@ -94,8 +94,8 @@ const styles = StyleSheet.create({
   },
   field: {
     fontSize: 17,
-    fontWeight: '300',
-    color: '#73A2D0',
+    fontWeight: '400',
+    color: '#4C365A',
     marginLeft: 8,
     marginTop: 35,
   },
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     color: "#1D1D1D",
   },
   submitButton: {
-    backgroundColor: "pink",
+    backgroundColor: "#FFBAC4",
     paddingVertical: 10,
     width: "50%",
     alignItems: "center",
