@@ -133,61 +133,67 @@ class TextToSpeech extends React.Component {
     return !backToAudio ? (
       <ImageBackground
         source={pic}
-        style={{ width: "100%", height: "111%", top: -60 }}
+        style={{ width: "100%", height: "110%", top: -60 }}
       >
         <SafeAreaView>
-        <ScrollView>
-          <View style={styles.container}>
-            <Text style={styles.title}>Time to meditate</Text>
-            <Text style={styles.mini}>...aka feel the 𝕞.𝕒.𝕘.𝕚.𝕜...</Text>
-            <Video
-              source={require("../assets/meditation.mp4")}
-              onLoadStart={() => this.setState({ isFetching_V: true })}
-              onLoad={() => this.setState({ isFetching_V: false })}
-              rate={1.0}
-              volume={1.0}
-              isMuted={false}
-              resizeMode="cover"
-              shouldPlay
-              isLooping
-              style={{ width: 300, height: 400}}
-            />
-            {isFetching_V && <Text>Video is loading...</Text>}
-            <View style={styles.container2}>
-              {isFetching_A && <ActivityIndicator size={32} color="#48C9B0" />}
-              <TouchableOpacity
-                style={styles.playButton}
-                onPress={this.playSound}
-              >
-                <Text>Play affirmations</Text>
-              </TouchableOpacity>
+          <ScrollView>
+            <View style={styles.container}>
+              <Text style={styles.title}>Time to meditate</Text>
+              <Text style={styles.mini}>...aka feel the 𝕞.𝕒.𝕘.𝕚.𝕜...</Text>
+              <Video
+                source={require("../assets/meditation.mp4")}
+                onLoadStart={() => this.setState({ isFetching_V: true })}
+                onLoad={() => this.setState({ isFetching_V: false })}
+                rate={1.0}
+                volume={1.0}
+                isMuted={false}
+                resizeMode="cover"
+                shouldPlay
+                isLooping
+                style={{ width: 365, height: 500 }}
+              />
+              {isFetching_V && <Text>Video is loading...</Text>}
+              <View style={styles.container2}>
+                {isFetching_A && (
+                  <ActivityIndicator size={32} color="#48C9B0" />
+                )}
+                <TouchableOpacity
+                  style={styles.playButton}
+                  onPress={this.playSound}
+                >
+                  <Text>Play affirmations</Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.playButton2}
-                onPress={this.props.playSound}
-              >
-                <Text>Play your own sound</Text>
+                <TouchableOpacity
+                  style={styles.playButton2}
+                  onPress={this.props.playSound}
+                >
+                  <Text>Play your own sound</Text>
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity onPress={this.onRepeatToggle}>
+                <Text style={styles.onRepeat}>𝚘𝚗 𝚛𝚎𝚙𝚎𝚊𝚝</Text>
               </TouchableOpacity>
+              {isLooping_A && (
+                <FontAwesome name="retweet" size={32} color="#48C9B0" />
+              )}
             </View>
-            <Button title="𝚘𝚗 𝚛𝚎𝚙𝚎𝚊𝚝" onPress={this.onRepeatToggle} />
-            {isLooping_A && (
-              <FontAwesome name="retweet" size={32} color="#48C9B0" />
+            {donePlaying_A && (
+              <View>
+                <Text style={styles.paragraph}>
+                  𝚆𝚎𝚕𝚕 𝚍𝚘𝚗𝚎! 𝙻𝚒𝚜𝚝𝚎𝚗 𝚝𝚘 𝚢𝚘𝚞𝚛 𝚊𝚏𝚏𝚒𝚛𝚖𝚊𝚝𝚒𝚘𝚗𝚜 𝚊𝚜 𝚖𝚊𝚗𝚢 𝚝𝚒𝚖𝚎𝚜 𝚊𝚜 𝚢𝚘𝚞
+                  𝚠𝚊𝚗𝚝 𝚘𝚛 𝚜𝚎𝚝 𝚒𝚝 𝚘𝚗 𝚛𝚎𝚙𝚎𝚊𝚝 ↑. 𝙸𝚏 𝚢𝚘𝚞 𝚠𝚊𝚗𝚝 𝚝𝚘 𝚛𝚎𝚌𝚘𝚛𝚍 𝚗𝚎𝚠 𝚘𝚗𝚎𝚜,
+                  𝚌𝚕𝚒𝚌𝚔:
+                </Text>
+                <TouchableOpacity
+                  style={styles.backButton}
+                  onPress={this.backToAudio}
+                >
+                  <Text style={this.backButton}>💝</Text>
+                </TouchableOpacity>
+              </View>
             )}
-          </View>
-          {donePlaying_A && (
-            <View>
-              <Text style={styles.paragraph}>
-              𝚆𝚎𝚕𝚕 𝚍𝚘𝚗𝚎! 𝙻𝚒𝚜𝚝𝚎𝚗 𝚝𝚘 𝚢𝚘𝚞𝚛 𝚊𝚏𝚏𝚒𝚛𝚖𝚊𝚝𝚒𝚘𝚗𝚜 𝚊𝚜 𝚖𝚊𝚗𝚢 𝚝𝚒𝚖𝚎𝚜 𝚊𝚜 𝚢𝚘𝚞 𝚠𝚊𝚗𝚝 𝚘𝚛 𝚜𝚎𝚝 𝚒𝚝 𝚘𝚗 𝚛𝚎𝚙𝚎𝚊𝚝 ↑. 𝙸𝚏 𝚢𝚘𝚞 𝚠𝚊𝚗𝚝 𝚝𝚘 𝚛𝚎𝚌𝚘𝚛𝚍 𝚗𝚎𝚠 𝚘𝚗𝚎𝚜, 𝚌𝚕𝚒𝚌𝚔:
-              </Text>
-              <TouchableOpacity
-                style={styles.backButton}
-                onPress={this.backToAudio}
-              >
-                <Text style={this.backButton}>💝</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </ScrollView>
+          </ScrollView>
         </SafeAreaView>
       </ImageBackground>
     ) : (
@@ -207,7 +213,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 80,
-    marginBottom: 40,
+    marginBottom: 30
   },
   container2: {
     flex: 1,
@@ -219,12 +225,12 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "500",
     fontSize: 18,
-    paddingBottom: 10,
+    paddingBottom: 10
   },
   mini: {
     alignSelf: "center",
     backgroundColor: "rgba(244, 172, 183, 0.2)",
-    marginBottom: 15,
+    marginBottom: 15
   },
   playButton: {
     backgroundColor: "#48C9B0",
@@ -243,6 +249,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 20
   },
+  onRepeat: {
+    fontWeight: "300",
+    fontSize: 18,
+    paddingTop: 10,
+    color: "#C9E3E3"
+  },
   backButton: {
     backgroundColor: "#FF1654",
     alignSelf: "center",
@@ -257,7 +269,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     color: "#E6ECE8",
     backgroundColor: "rgba(38, 22, 68, 0.6)"
-  },
+  }
 });
 
 export default TextToSpeech;

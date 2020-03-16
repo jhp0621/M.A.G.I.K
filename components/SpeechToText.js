@@ -237,6 +237,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 10,
     color: "#FFD3DB",
+    borderRadius: 5,
     borderWidth: 1
   },
   startButton: {
