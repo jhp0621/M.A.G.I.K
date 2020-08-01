@@ -1,6 +1,5 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, Button,TouchableOpacity } from "react-native";
-import Greeting from "./components/Greeting";
 import SpeechToText from "./components/SpeechToText";
 
 let pic = {
